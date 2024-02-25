@@ -24,9 +24,10 @@ export default class Parser {
     return prev;
   }
 
+  // deno-lint-ignore no-explicit-any
   private expect(type: TokenType, err: any) {
     const prev = this.tokens.shift();
-    if (!prev || prev.type == type) {
+    if (!prev || prev.type != type) {
       console.error("Parser Error\n", err, prev, "Expecting ", type);
       Deno.exit(1);
     }
