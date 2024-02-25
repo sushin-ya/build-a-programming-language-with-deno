@@ -14,6 +14,7 @@ Deno.test("Test Lexer Output", async () => {
     { value: "/", type: 5 },
     { value: "3", type: 0 },
     { value: ")", type: 4 },
+    { type: 7, value: "EndOffFile" },
   ];
 
   // 実際の出力を取得
