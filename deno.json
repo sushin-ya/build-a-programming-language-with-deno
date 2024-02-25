@@ -1,0 +1,8 @@
+{
+  "tasks": {
+    "check": "deno test -A"
+  },
+  "githooks": {
+    "pre-commit": "check"
+  }
+}
