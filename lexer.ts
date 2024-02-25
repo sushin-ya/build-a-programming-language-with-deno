@@ -93,7 +93,12 @@ export function tokenize(sourceCode: string): Token[] {
   return tokens;
 }
 
-const source = await Deno.readTextFile("./test.txt");
-for (const token of tokenize(source)) {
-  console.log(token);
+// 実行関数
+export async function runLexer() {
+  const source = await Deno.readTextFile("./test.txt");
+  for (const token of tokenize(source)) {
+    console.log(token);
+  }
 }
+
+runLexer();
