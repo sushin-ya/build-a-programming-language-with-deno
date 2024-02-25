@@ -1,5 +1,5 @@
 import { assertEquals } from "https://deno.land/std@0.217.0/assert/mod.ts";
-import { runLexer } from "../lexer.ts";
+import { runLexer } from "../frontend/lexer.ts";
 
 Deno.test("Test Lexer Output", async () => {
   // 期待される出力
