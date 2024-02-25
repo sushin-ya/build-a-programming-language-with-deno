@@ -8,6 +8,12 @@ Deno.test("Test Lexer Output", async () => {
     { value: "x", type: 1 },
     { value: "=", type: 2 },
     { value: "45", type: 0 },
+    { value: "*", type: 5 },
+    { value: "(", type: 3 },
+    { value: "4", type: 0 },
+    { value: "/", type: 5 },
+    { value: "3", type: 0 },
+    { value: ")", type: 4 },
   ];
 
   // 実際の出力を取得
