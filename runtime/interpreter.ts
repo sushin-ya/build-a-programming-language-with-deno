@@ -4,16 +4,18 @@ import {
   NumericLiteral,
   Program,
   Stmt,
+  Identifier,
 } from "./../frontend/ast.ts";
+import Environment from "./environment.ts";
 
-function eval_program(program: Program): RuntimeVal {
+function eval_program(program: Program, env: Environment): RuntimeVal {
   let lastEvaluated: RuntimeVal = {
     type: "null",
     value: "null",
   } as NullVal;
 
   for (const statement of program.body) {
-    lastEvaluated = evaluate(statement);
+    lastEvaluated = evaluate(statement, env);
   }
 
   return lastEvaluated;
@@ -35,9 +37,9 @@ function eval_numeric_binary_expr(
   return { value: result, type: "number" };
 }
 
-function evaluate_binary_expr(binop: BinaryExpr): RuntimeVal {
-  const lhs = evaluate(binop.left);
-  const rhs = evaluate(binop.right);
+function evaluate_binary_expr(binop: BinaryExpr, env: Environment): RuntimeVal {
+  const lhs = evaluate(binop.left, env);
+  const rhs = evaluate(binop.right, env);
 
   if (lhs.type == "number" && rhs.type == "number") {
     return eval_numeric_binary_expr(
@@ -51,7 +53,12 @@ function evaluate_binary_expr(binop: BinaryExpr): RuntimeVal {
   return { type: "null", value: "null" } as NullVal;
 }
 
-export function evaluate(astNode: Stmt): RuntimeVal {
+function eval_identifier(ident: Identifier, env: Environment): RuntimeVal {
+  const val = env.lookupVar(ident.symbol);
+  return val;
+}
+
+export function evaluate(astNode: Stmt, env: Environment): RuntimeVal {
   switch (astNode.kind) {
     case "NumericLiteral":
       return {
@@ -62,11 +69,14 @@ export function evaluate(astNode: Stmt): RuntimeVal {
     case "NullLiteral":
       return { value: "null", type: "null" } as NullVal;
 
+    case "Identifier":
+      return eval_identifier(astNode as Identifier, env);
+
     case "BinaryExpr":
-      return evaluate_binary_expr(astNode as BinaryExpr);
+      return evaluate_binary_expr(astNode as BinaryExpr, env);
 
     case "Program":
-      return eval_program(astNode as Program);
+      return eval_program(astNode as Program, env);
 
     default:
       console.log(
