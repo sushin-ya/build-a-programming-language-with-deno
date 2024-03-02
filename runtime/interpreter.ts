@@ -6,9 +6,14 @@ import {
   Stmt,
   Identifier,
   VarDeclaration,
+  AssignmentExpr,
 } from "./../frontend/ast.ts";
 import Environment from "./environment.ts";
-import { eval_identifier, evaluate_binary_expr } from "./eval/expressions.ts";
+import {
+  eval_identifier,
+  eval_binary_expr,
+  eval_assignment,
+} from "./eval/expressions.ts";
 import { eval_program, eval_var_declaration } from "./eval/statements.ts";
 
 export function evaluate(astNode: Stmt, env: Environment): RuntimeVal {
@@ -22,8 +27,11 @@ export function evaluate(astNode: Stmt, env: Environment): RuntimeVal {
     case "Identifier":
       return eval_identifier(astNode as Identifier, env);
 
+    case "AssignmentExpr":
+      return eval_assignment(astNode as AssignmentExpr, env);
+
     case "BinaryExpr":
-      return evaluate_binary_expr(astNode as BinaryExpr, env);
+      return eval_binary_expr(astNode as BinaryExpr, env);
 
     case "Program":
       return eval_program(astNode as Program, env);

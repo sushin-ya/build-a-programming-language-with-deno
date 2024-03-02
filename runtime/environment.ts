@@ -35,6 +35,7 @@ export default class Environment {
     if (env.constants.has(varname)) {
       throw `Cannot reassign to variable ${varname} as it was declared constants.`;
     }
+
     env.variables.set(varname, value);
     return value;
   }
