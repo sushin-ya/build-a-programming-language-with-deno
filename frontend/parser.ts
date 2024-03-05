@@ -1,3 +1,5 @@
+import { Property } from "./ast.ts";
+import { ObjectLiteral } from "./ast.ts";
 import {
   Stmt,
   Program,
@@ -109,7 +111,7 @@ export default class Parser {
   }
 
   private parse_assignment_expr(): Expr {
-    const left = this.parse_additive_expr(); // switch this out with objectExpr
+    const left = this.parse_object_expr(); // switch this out with objectExpr
 
     if (this.at().type == TokenType.Equals) {
       this.eat(); // advance past equals
@@ -119,6 +121,58 @@ export default class Parser {
     }
 
     return left;
+  }
+
+  private parse_object_expr(): Expr {
+    if (this.at().type !== TokenType.OpenBrace) {
+      return this.parse_additive_expr();
+    }
+
+    this.eat();
+    const properties = new Array<Property>();
+
+    while (this.not_eof() && this.at().type !== TokenType.CloseBrace) {
+      const key = this.expect(
+        TokenType.Identifier,
+        "Object literal key expected"
+      ).value;
+
+      // Allows shorthand key: pair -> { key,}
+      if (this.at().type == TokenType.Comma) {
+        this.eat();
+        properties.push({
+          key,
+          kind: "Property",
+          value: undefined,
+        } as Property);
+        continue;
+      } else if (this.at().type == TokenType.CloseBrace) {
+        properties.push({
+          key,
+          kind: "Property",
+          value: undefined,
+        } as Property);
+        continue;
+      }
+
+      // {key: val}
+      this.expect(
+        TokenType.Colon,
+        "Missing colon following identifier in ObjectExpr"
+      );
+      const value = this.parse_expr();
+
+      properties.push({ kind: "Property", value, key });
+      if (this.at().type !== TokenType.CloseBrace) {
+        this.expect(
+          TokenType.Comma,
+          "Expected comma or closing bracket following property."
+        );
+      }
+    }
+
+    this.expect(TokenType.CloseBrace, "Object literal missing closing brace.");
+    return { kind: "ObjectLiteral", properties } as ObjectLiteral;
   }
 
   // (10 + 5) - 5

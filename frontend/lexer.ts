@@ -2,15 +2,23 @@
 // [LetToken, IdentifierTk, EqualLsToken , NumberToken]
 
 export enum TokenType {
+  // Literal Types
   Number,
   Identifier,
-  Equals,
-  OpenParen,
-  CloseParen,
-  BinaryOperator,
+  // Keywords
   Let,
   Const,
+
+  // Grouping * Operators
+  BinaryOperator,
+  Equals,
+  Comma,
+  Colon,
   Semicolon,
+  OpenParen,
+  CloseParen,
+  OpenBrace,
+  CloseBrace,
   EOF, // Signified the end of file
 }
 
@@ -32,8 +40,8 @@ function isalpha(src: string): boolean {
   return src.toUpperCase() != src.toLowerCase();
 }
 
-function isslippable(str: string): boolean {
-  return str == " " || str == "\n" || str == "\t";
+function isskippable(str: string): boolean {
+  return str == " " || str == "\n" || str == "\t" || str == "\r";
 }
 
 function isint(str: string): boolean {
@@ -52,6 +60,10 @@ export function tokenize(sourceCode: string): Token[] {
       tokens.push(token(src.shift(), TokenType.OpenParen));
     } else if (src[0] == ")") {
       tokens.push(token(src.shift(), TokenType.CloseParen));
+    } else if (src[0] == "{") {
+      tokens.push(token(src.shift(), TokenType.OpenBrace));
+    } else if (src[0] == "}") {
+      tokens.push(token(src.shift(), TokenType.CloseBrace));
     } else if (
       src[0] == "+" ||
       src[0] == "-" ||
@@ -64,6 +76,10 @@ export function tokenize(sourceCode: string): Token[] {
       tokens.push(token(src.shift(), TokenType.Equals));
     } else if (src[0] == ";") {
       tokens.push(token(src.shift(), TokenType.Semicolon));
+    } else if (src[0] == ":") {
+      tokens.push(token(src.shift(), TokenType.Colon));
+    } else if (src[0] == ",") {
+      tokens.push(token(src.shift(), TokenType.Comma));
     } else {
       // Handle multi character tokens
 
@@ -88,7 +104,7 @@ export function tokenize(sourceCode: string): Token[] {
         } else {
           tokens.push(token(ident, TokenType.Identifier));
         }
-      } else if (isslippable(src[0])) {
+      } else if (isskippable(src[0])) {
         src.shift(); // SKIP THE CURRENT CHARACTER
       } else {
         console.log("Unrecognized character found in source: ", src[0]);
@@ -101,7 +117,7 @@ export function tokenize(sourceCode: string): Token[] {
   return tokens;
 }
 
-// 実行関数
+// 実行関数;
 export async function runLexer() {
   const source = await Deno.readTextFile("./frontend/test.txt");
   for (const token of tokenize(source)) {
@@ -109,4 +125,4 @@ export async function runLexer() {
   }
 }
 
-runLexer();
+// runLexer();
