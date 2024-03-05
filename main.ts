@@ -1,5 +1,5 @@
 import Parser from "./frontend/parser.ts";
-import Environment from "./runtime/environment.ts";
+import { createGlobalEnv } from "./runtime/environment.ts";
 import { evaluate } from "./runtime/interpreter.ts";
 
 // repl();
@@ -7,7 +7,7 @@ run("./object.txt");
 
 async function run(filename: string) {
   const parser = new Parser();
-  const env = new Environment();
+  const env = createGlobalEnv();
 
   const input = await Deno.readTextFile(filename);
   const program = parser.produceAST(input);
