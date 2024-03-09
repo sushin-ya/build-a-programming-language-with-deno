@@ -2,6 +2,7 @@ export type NodeType =
   // STATEMENT
   | "Program"
   | "VarDeclaration"
+  | "FunctionDeclaration"
   // EXPRESSIONS
   | "AssignmentExpr"
   | "MemberExpr"
@@ -27,6 +28,13 @@ export interface VarDeclaration extends Stmt {
   constant: boolean;
   identifier: string;
   value?: Expr;
+}
+
+export interface FunctionDeclaration extends Stmt {
+  kind: "FunctionDeclaration";
+  parameters: string[];
+  name: string;
+  body: Stmt[];
 }
 
 // deno-lint-ignore no-empty-interface

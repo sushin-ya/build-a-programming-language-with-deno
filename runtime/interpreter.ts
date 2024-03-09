@@ -51,7 +51,7 @@ export function evaluate(astNode: Stmt, env: Environment): RuntimeVal {
 
     default:
       console.log(
-        "This AST Node has not yet been setup for interpretation",
+        "This AST Node has not yet been setup for interpretation\n",
         astNode
       );
       Deno.exit(0);

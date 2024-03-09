@@ -1,8 +1,17 @@
-let foo = 5 * 2; 
-foo = foo / 4 + 5 
+fn add (x, y) {
+  let result = x + y;
+  print(result)
 
-print(foo, 45)
+  result
+}
 
-const timeNow = time();
+fn sub () {
+  fn add (x, y) {
+    let result = x + y;
+    print(result)
+    
+    result
+  }
 
-print(timeNow)
+  let foo = 45; 
+}
