@@ -15,3 +15,7 @@ fn sub () {
 
   let foo = 45; 
 }
+
+const result = add(10,4);
+
+print(result)

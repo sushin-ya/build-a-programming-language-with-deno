@@ -9,6 +9,7 @@ import {
   AssignmentExpr,
   ObjectLiteral,
   CallExpr,
+  FunctionDeclaration,
 } from "./../frontend/ast.ts";
 import Environment from "./environment.ts";
 import {
@@ -18,7 +19,11 @@ import {
   eval_object_expr,
   eval_call_expr,
 } from "./eval/expressions.ts";
-import { eval_program, eval_var_declaration } from "./eval/statements.ts";
+import {
+  eval_function_declaration,
+  eval_program,
+  eval_var_declaration,
+} from "./eval/statements.ts";
 
 export function evaluate(astNode: Stmt, env: Environment): RuntimeVal {
   switch (astNode.kind) {
@@ -48,6 +53,9 @@ export function evaluate(astNode: Stmt, env: Environment): RuntimeVal {
 
     case "VarDeclaration":
       return eval_var_declaration(astNode as VarDeclaration, env);
+
+    case "FunctionDeclaration":
+      return eval_function_declaration(astNode as FunctionDeclaration, env);
 
     default:
       console.log(
