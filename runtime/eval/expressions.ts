@@ -3,6 +3,7 @@ import {
   Identifier,
   AssignmentExpr,
   ObjectLiteral,
+  CallExpr,
 } from "../../frontend/ast.ts";
 import Environment from "../environment.ts";
 import { evaluate } from "../interpreter.ts";
@@ -75,4 +76,9 @@ export function eval_object_expr(
   }
 
   return object;
+}
+
+export function eval_call_expr(expr: CallExpr, env: Environment): RuntimeVal {
+  console.log(expr);
+  return MK_NULL();
 }

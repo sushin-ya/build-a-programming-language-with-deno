@@ -1,6 +1,4 @@
-import { MK_NULL } from "./values.ts";
-import { MK_BOOL } from "./values.ts";
-import { RuntimeVal } from "./values.ts";
+import { MK_BOOL, MK_NULL, MK_NATIVE_FN, RuntimeVal } from "./values.ts";
 
 export function createGlobalEnv() {
   const env = new Environment();
@@ -8,6 +6,16 @@ export function createGlobalEnv() {
   env.declareVar("true", MK_BOOL(true), true);
   env.declareVar("false", MK_BOOL(false), true);
   env.declareVar("null", MK_NULL(), true);
+
+  // Define a native builtin method
+  env.declareVar(
+    "print",
+    MK_NATIVE_FN((args, scope) => {
+      console.log(...args);
+      return MK_NULL();
+    }),
+    true
+  );
 
   return env;
 }
