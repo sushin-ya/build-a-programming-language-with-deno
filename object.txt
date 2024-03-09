@@ -1,21 +1,10 @@
-fn add (x, y) {
-  let result = x + y;
-  print(result)
-
-  result
-}
-
-fn sub () {
+fn makeAdder(offset) {
   fn add (x, y) {
-    let result = x + y;
-    print(result)
-    
-    result
+    x + y + offset
   }
 
-  let foo = 45; 
+  add
 }
 
-const result = add(10,4);
-
-print(result)
+const adder = makeAdder(1);
+print(adder(10, 5))
